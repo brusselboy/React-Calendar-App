@@ -1,25 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {FC} from 'react';
 import './App.css';
+import AppRouter from "./components/AppRouter";
+import Navbar from "./components/Navbar";
+import {Layout} from "antd";
+import {useDispatch} from "react-redux";
+import {AuthActionCreators} from "./store/reducers/auth/action-creators";
+import {IUser} from "./models/IUser";
 
-function App() {
+const App: FC = () => {
+    const dispatch = useDispatch()
+
+    if (localStorage.getItem('auth')) {
+        dispatch(AuthActionCreators.setUser({username: localStorage.getItem('username' || '')} as IUser))
+        dispatch(AuthActionCreators.setAuth(true))
+    }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Layout>
+        <Navbar/>
+        <Layout.Content>
+            <AppRouter />
+        </Layout.Content>
+    </Layout>
   );
 }
 
